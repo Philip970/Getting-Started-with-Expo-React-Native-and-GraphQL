@@ -13,7 +13,7 @@ import { useState } from "react";
 import { ListItem } from "./components/ListItem";
 import { AddGameScreen } from "./components/Modal";
 import { GET_GAMES, UPDATE_GAME } from "./queries/games";
-import { CREATE_GAME } from "./mutations/games";
+import { CREATE_GAME, DELETE_GAME } from "./mutations/games";
 import { AddGameInput, EditGameInput } from "./__generated__/graphql";
 
 export function Home() {
@@ -23,12 +23,20 @@ export function Home() {
   const { data, loading, error, refetch } = useQuery(GET_GAMES);
   const [addGame] = useMutation(CREATE_GAME);
   const [updateGame] = useMutation(UPDATE_GAME);
-
-  console.log(data?.games);
+  const [deleteGame] = useMutation(DELETE_GAME);
 
   const showModal = (item: any = {}) => {
     setItem(item);
     setVisible(true);
+  };
+
+  const handleDeleteGame = async (id: string) => {
+    await deleteGame({
+      variables: {
+        id,
+      },
+    });
+    refetch();
   };
 
   const saveGame = async (title: string, platforms: string[], id?: string) => {
@@ -37,7 +45,7 @@ export function Home() {
         title,
         platform: platforms,
       };
-      updateGame({
+      await updateGame({
         variables: {
           id,
           edits,
@@ -48,7 +56,7 @@ export function Home() {
         title,
         platform: platforms,
       };
-      addGame({
+      await addGame({
         variables: {
           game,
         },
@@ -72,6 +80,7 @@ export function Home() {
               item={data.item}
               onPress={() => {}}
               onEdit={() => showModal(data.item)}
+              onDelete={() => handleDeleteGame(data.item?.id)}
             />
           );
         }}

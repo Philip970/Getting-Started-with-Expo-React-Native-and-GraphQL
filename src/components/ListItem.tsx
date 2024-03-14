@@ -4,10 +4,12 @@ export const ListItem = ({
   item,
   onPress,
   onEdit,
+  onDelete,
 }: {
   item: any;
   onPress: () => void;
   onEdit: () => void;
+  onDelete: () => void;
 }) => {
   const { title, platform } = item;
 
@@ -29,8 +31,18 @@ export const ListItem = ({
     borderColor: "black",
   };
 
+  const rightContainer: ViewStyle = {
+    display: "flex",
+    flexDirection: "row",
+  };
+
   const editButton: TextStyle = {
     color: "blue",
+  };
+
+  const deleteButton: TextStyle = {
+    color: "red",
+    marginLeft: 16,
   };
 
   return (
@@ -39,9 +51,12 @@ export const ListItem = ({
         <Text>{title}</Text>
         <Text>{platform?.join(", ")}</Text>
       </View>
-      <View>
+      <View style={rightContainer}>
         <Pressable onPress={onEdit}>
           <Text style={editButton}>Edit</Text>
+        </Pressable>
+        <Pressable onPress={onDelete}>
+          <Text style={deleteButton}>Delete</Text>
         </Pressable>
       </View>
     </View>
