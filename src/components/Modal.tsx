@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,35 +10,43 @@ import {
 } from "react-native";
 
 interface Props {
-  onPress: (title: string, message: string) => void;
+  item: any;
+  onPress: (title: string, platforms: string[], id?: string) => void;
 }
 
-export const AddTodoScreen = ({ onPress }: Props) => {
+export const AddGameScreen = ({ item, onPress }: Props) => {
   const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [platforms, setPlatforms] = useState("");
   const onButtonPressed = () => {
-    if (title && message) {
-      onPress(title, message);
+    if (title && platforms) {
+      onPress(title, platforms.split(" "), item.id);
     }
   };
+
+  useEffect(() => {
+    if (item) {
+      setTitle(item.title);
+      setPlatforms(item.platform.join(" "));
+    }
+  }, []);
   return (
     <View style={container}>
       <View style={textContainer}>
         <TextInput
           value={title}
           style={textInput}
-          placeholder="Todo Title"
+          placeholder="Title"
           onChangeText={setTitle}
         />
         <TextInput
-          value={message}
+          value={platforms}
           style={textInput}
-          placeholder="Todo Message"
-          onChangeText={setMessage}
+          placeholder="Platforms"
+          onChangeText={setPlatforms}
         />
       </View>
       <Pressable onPress={onButtonPressed} style={button}>
-        <Text>Create</Text>
+        <Text>{item ? "Update" : "Create"}</Text>
       </Pressable>
     </View>
   );

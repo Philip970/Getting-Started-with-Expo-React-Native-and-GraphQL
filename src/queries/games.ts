@@ -9,3 +9,12 @@ export const GET_GAMES = gql(`
         }
     }
 `);
+
+export const UPDATE_GAME = gql(`
+    mutation UpdateMutation($id: ID!, $edits: EditGameInput!) {
+        updateGame(edits: $edits, id: $id) {
+            title
+            platform
+        }
+    }
+`);
