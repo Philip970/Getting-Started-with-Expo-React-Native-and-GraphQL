@@ -1,11 +1,13 @@
-import { Pressable, Text, View, ViewStyle } from "react-native";
+import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 
 export const ListItem = ({
   item,
   onPress,
+  onEdit,
 }: {
   item: any;
   onPress: () => void;
+  onEdit: () => void;
 }) => {
   const { title, platform } = item;
 
@@ -27,13 +29,21 @@ export const ListItem = ({
     borderColor: "black",
   };
 
+  const editButton: TextStyle = {
+    color: "blue",
+  };
+
   return (
-    <Pressable style={containerStyle} onPress={onPress}>
+    <View style={containerStyle} onPress={onPress}>
       <View>
         <Text>{title}</Text>
         <Text>{platform?.join(", ")}</Text>
       </View>
-      {/* <View style={completedStatus} /> */}
-    </Pressable>
+      <View>
+        <Pressable onPress={onEdit}>
+          <Text style={editButton}>Edit</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 };

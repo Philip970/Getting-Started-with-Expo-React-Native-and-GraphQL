@@ -7,34 +7,55 @@ import {
   Modal,
   Text,
 } from "react-native";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 
 import { ListItem } from "./components/ListItem";
-import { AddTodoScreen } from "./components/Modal";
-import { GET_GAMES } from "./queries/games";
-
-const mockData = [
-  {
-    title: "Hello",
-    message: "World",
-    completed: false,
-  },
-];
+import { AddGameScreen } from "./components/Modal";
+import { GET_GAMES, UPDATE_GAME } from "./queries/games";
+import { CREATE_GAME } from "./mutations/games";
+import { AddGameInput, EditGameInput } from "./__generated__/graphql";
 
 export function Home() {
   const [visible, setVisible] = useState(false);
+  const [item, setItem] = useState();
 
   const { data, loading, error, refetch } = useQuery(GET_GAMES);
+  const [addGame] = useMutation(CREATE_GAME);
+  const [updateGame] = useMutation(UPDATE_GAME);
 
   console.log(data?.games);
 
-  const showModal = () => {
+  const showModal = (item: any = {}) => {
+    setItem(item);
     setVisible(true);
   };
 
-  const createTodo = async (title: string, message: string) => {
+  const saveGame = async (title: string, platforms: string[], id?: string) => {
+    if (id) {
+      const edits: EditGameInput = {
+        title,
+        platform: platforms,
+      };
+      updateGame({
+        variables: {
+          id,
+          edits,
+        },
+      });
+    } else {
+      const game: AddGameInput = {
+        title,
+        platform: platforms,
+      };
+      addGame({
+        variables: {
+          game,
+        },
+      });
+    }
     setVisible(false);
+    refetch();
   };
 
   if (loading) return <Text>Loading...</Text>;
@@ -46,12 +67,18 @@ export function Home() {
       <FlatList
         data={data?.games}
         renderItem={(data) => {
-          return <ListItem item={data.item} onPress={() => {}} />;
+          return (
+            <ListItem
+              item={data.item}
+              onPress={() => {}}
+              onEdit={() => showModal(data.item)}
+            />
+          );
         }}
       />
       <Pressable style={styles.floatingButton} onPress={showModal} />
       <Modal visible={visible} animationType="slide">
-        <AddTodoScreen onPress={createTodo} />
+        <AddGameScreen onPress={saveGame} item={item} />
       </Modal>
     </SafeAreaView>
   );
