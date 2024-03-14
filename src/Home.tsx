@@ -5,12 +5,14 @@ import {
   StyleSheet,
   View,
   Modal,
+  Text,
 } from "react-native";
+import { useQuery } from "@apollo/client";
+import { useState } from "react";
 
 import { ListItem } from "./components/ListItem";
-
-import { useState } from "react";
 import { AddTodoScreen } from "./components/Modal";
+import { GET_GAMES } from "./queries/games";
 
 const mockData = [
   {
@@ -23,6 +25,10 @@ const mockData = [
 export function Home() {
   const [visible, setVisible] = useState(false);
 
+  const { data, loading, error, refetch } = useQuery(GET_GAMES);
+
+  console.log(data?.games);
+
   const showModal = () => {
     setVisible(true);
   };
@@ -31,10 +37,14 @@ export function Home() {
     setVisible(false);
   };
 
+  if (loading) return <Text>Loading...</Text>;
+
+  if (error) return <Text>Something went wrong !</Text>;
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={mockData}
+        data={data?.games}
         renderItem={(data) => {
           return <ListItem item={data.item} onPress={() => {}} />;
         }}
