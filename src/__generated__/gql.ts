@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n    mutation CreateGame($game: AddGameInput!) {\n        addGame(game: $game) {\n            id\n            title\n            platform\n        }\n    }\n": types.CreateGameDocument,
+    "\n    mutation DeleteGame($id: ID!) {\n        deleteGame(id: $id) {\n            id\n            title\n            platform\n        }\n    }\n": types.DeleteGameDocument,
     "\n    query getGames {\n        games {\n            id\n            title\n            platform\n        }\n    }\n": types.GetGamesDocument,
     "\n    mutation UpdateMutation($id: ID!, $edits: EditGameInput!) {\n        updateGame(edits: $edits, id: $id) {\n            title\n            platform\n        }\n    }\n": types.UpdateMutationDocument,
 };
@@ -36,6 +37,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    mutation CreateGame($game: AddGameInput!) {\n        addGame(game: $game) {\n            id\n            title\n            platform\n        }\n    }\n"): (typeof documents)["\n    mutation CreateGame($game: AddGameInput!) {\n        addGame(game: $game) {\n            id\n            title\n            platform\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation DeleteGame($id: ID!) {\n        deleteGame(id: $id) {\n            id\n            title\n            platform\n        }\n    }\n"): (typeof documents)["\n    mutation DeleteGame($id: ID!) {\n        deleteGame(id: $id) {\n            id\n            title\n            platform\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
