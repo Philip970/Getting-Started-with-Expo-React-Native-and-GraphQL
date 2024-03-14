@@ -7,7 +7,7 @@ export const ListItem = ({
   item: any;
   onPress: () => void;
 }) => {
-  const { title, message, completed } = item;
+  const { title, platform } = item;
 
   const containerStyle: ViewStyle = {
     height: 75,
@@ -22,7 +22,7 @@ export const ListItem = ({
     height: 30,
     width: 30,
     borderRadius: 15,
-    backgroundColor: completed ? "lightblue" : "white",
+    // backgroundColor: completed ? "lightblue" : "white",
     borderWidth: 1,
     borderColor: "black",
   };
@@ -31,9 +31,9 @@ export const ListItem = ({
     <Pressable style={containerStyle} onPress={onPress}>
       <View>
         <Text>{title}</Text>
-        <Text>{message}</Text>
+        <Text>{platform?.join(", ")}</Text>
       </View>
-      <View style={completedStatus} />
+      {/* <View style={completedStatus} /> */}
     </Pressable>
   );
 };
